@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/middle_dimen"
+        />
+    <TextView
+        android:id="@+id/tv_week"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/middle_dimen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/middle_dimen"
+        android:layout_marginTop="@dimen/middle_dimen"
+        android:layout_below="@id/tv_date"
+        android:text="@string/item_weather_temperature"
+        />
+    <TextView
+        android:id="@+id/tv_wind_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_temperature"
+        android:layout_marginTop="@dimen/middle_dimen"
+        android:layout_marginLeft="@dimen/middle_dimen"
+        android:text="@string/item_weather_wind_speed"
+        />
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/middle_dimen"
+        android:layout_marginTop="@dimen/middle_dimen"
+        android:layout_below="@id/tv_wind_speed"
+        android:text="@string/item_weather_day"
+        />
+    <TextView
+        android:id="@+id/tv_night"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/middle_dimen"
+        android:layout_marginTop="@dimen/middle_dimen"
+        android:layout_below="@id/tv_day"
+        android:text="@string/item_weather_night"
+        />
+
+</RelativeLayout>

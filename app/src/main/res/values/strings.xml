@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DesignPatternDemo</string>
+
+    <string name="item_weather_day">白天：%s</string>
+    <string name="item_weather_night">晚上：%s</string>
+    <string name="item_weather_temperature">温度：%s</string>
+    <string name="item_weather_wind_speed">风速：%s</string>
+
+</resources>
