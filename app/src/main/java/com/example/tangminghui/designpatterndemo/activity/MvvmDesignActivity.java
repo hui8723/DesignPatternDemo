@@ -72,6 +72,7 @@ public class MvvmDesignActivity extends Activity{
             Log.i(TAG,"数据不能为空！");
         }else {
             showProgressDialog();
+            Log.i(TAG,weather.getProvince());
             getWeatherFromCity(weather.getProvince(),weather.getCity());
         }
     }
