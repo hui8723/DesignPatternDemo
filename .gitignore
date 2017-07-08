@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Created by https://www.gitignore.io/api/androidstudio
 
 ### AndroidStudio ###
@@ -132,3 +133,14 @@ google-services.json
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.gitignore.io/api/androidstudio
+=======
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+>>>>>>> d94b6d9... 初始化项目
