@@ -8,11 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.tangminghui.designpatterndemo.R;
 import com.example.tangminghui.designpatterndemo.adapter.WeatherMvvmAdapter;
 import com.example.tangminghui.designpatterndemo.app.DesignPatternConfig;
+import com.example.tangminghui.designpatterndemo.app.MainApplication;
 import com.example.tangminghui.designpatterndemo.databinding.ActivityMvvmBinding;
 import com.example.tangminghui.designpatterndemo.entity.Result;
 import com.example.tangminghui.designpatterndemo.entity.ResultMvvm;
@@ -28,9 +28,8 @@ import java.util.List;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -43,7 +42,7 @@ public class MvvmDesignActivity extends Activity{
     private ActivityMvvmBinding binding;
     private ProgressDialog progressDialog;
     private WeatherMvvmAdapter adapter;
-    private List<WeatherMvvm> weatherMvvms = new ArrayList<WeatherMvvm>();
+    private List<WeatherMvvm> weatherMvvms = new ArrayList<>();
     private Weather weather;
 
 
@@ -65,7 +64,6 @@ public class MvvmDesignActivity extends Activity{
         binding.ryMvvmWeather.setLayoutManager(new LinearLayoutManager(this));
     }
 
-//    Button点击事件
     public void weatherFromBtn(View view){
         Log.i(TAG,"weather:" + weather.getProvince() );
         if ("请输入省".equals(weather.getProvince()) || "请输入市".equals(weather.getCity())){
@@ -104,11 +102,12 @@ public class MvvmDesignActivity extends Activity{
                 .baseUrl(DesignPatternConfig.MOB_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(OkHttpUtils.getClient())
+                .client(OkHttpUtils.getClient(MainApplication.getInstance()))
                 .build();
         final WeatherDBService weatherDBService = retrofit.create(WeatherDBService.class);
         weatherDBService.getWeather(DesignPatternConfig.MOBAPI_KEY,city,province)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Result<ResultMvvm>>() {
                     @Override
                     public void onCompleted() {

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.tangminghui.designpatterndemo.R;
 import com.example.tangminghui.designpatterndemo.adapter.WeatherAdapter;
 import com.example.tangminghui.designpatterndemo.app.DesignPatternConfig;
+import com.example.tangminghui.designpatterndemo.app.MainApplication;
 import com.example.tangminghui.designpatterndemo.entity.Result;
 import com.example.tangminghui.designpatterndemo.entity.ResultEntity;
 import com.example.tangminghui.designpatterndemo.entity.WeatherEntity;
@@ -43,7 +44,7 @@ public class MvcDesignActivity extends Activity {
     private Button btnSubmit;
     private RecyclerView ry_weather;
     private WeatherAdapter adapter;
-    private List<WeatherEntity> weatherEntities = new ArrayList<WeatherEntity>();
+    private List<WeatherEntity> weatherEntities = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class MvcDesignActivity extends Activity {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DesignPatternConfig.MOB_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(OkHttpUtils.getClient())
+                .client(OkHttpUtils.getClient(MainApplication.getInstance()))
                 .build();
         final WeatherService weatherService = retrofit.create(WeatherService.class);
         Call<Result<ResultEntity>> call = weatherService.getWeather(DesignPatternConfig.MOBAPI_KEY,city,province);

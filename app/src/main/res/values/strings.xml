@@ -6,4 +6,6 @@
     <string name="item_weather_temperature">温度：%s</string>
     <string name="item_weather_wind_speed">风速：%s</string>
 
+    <string name="province_hint" >请输入省</string>
+    <string name="city_hint" >请输入市</string>
 </resources>
