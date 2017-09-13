@@ -1,2 +1,2 @@
 # DesignPatternDemo
-## 用MVC、MVP、MVVM三种设计模式实现查询天气的请求。
+## MVC、MVP、MVVM、MVP+DataBinding 设计模式实现查询天气的请求
