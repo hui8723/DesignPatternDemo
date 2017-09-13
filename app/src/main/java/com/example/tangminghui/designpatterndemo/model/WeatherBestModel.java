@@ -1,20 +1,17 @@
-package com.example.tangminghui.designpatterndemo.presenter;
+package com.example.tangminghui.designpatterndemo.model;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.tangminghui.designpatterndemo.activity.MvcDesignActivity;
 import com.example.tangminghui.designpatterndemo.app.DesignPatternConfig;
 import com.example.tangminghui.designpatterndemo.app.MainApplication;
 import com.example.tangminghui.designpatterndemo.entity.Result;
 import com.example.tangminghui.designpatterndemo.entity.ResultEntity;
+import com.example.tangminghui.designpatterndemo.entity.ResultMvvm;
 import com.example.tangminghui.designpatterndemo.entity.WeatherEntity;
+import com.example.tangminghui.designpatterndemo.entity.WeatherMvvm;
+import com.example.tangminghui.designpatterndemo.interfaces.WeatherDBService;
 import com.example.tangminghui.designpatterndemo.interfaces.WeatherRxService;
-import com.example.tangminghui.designpatterndemo.interfaces.WeatherView;
 import com.example.tangminghui.designpatterndemo.utils.OkHttpUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import java.util.List;
 
@@ -26,27 +23,26 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by tangminghui on 2017/7/1.
+ * Created by hui on 2017/9/13.
  */
 
-public class WeatherPresenter extends MvpBasePresenter<WeatherView> {
+public class WeatherBestModel implements IWeatherModel<WeatherMvvm> {
 
-    private static final String TAG = "WeatherPresenter";
+    private static final String TAG = "WeatherBestModel";
 
-    public void get(String key,String city,String province) {
-        getView().onLoadWeatherStart();
-        Gson gson = new GsonBuilder().create();
+    @Override
+    public void loadWeathers(String province, String city, final onLoadListener<WeatherMvvm> listener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DesignPatternConfig.MOB_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(OkHttpUtils.getClient(MainApplication.getInstance()))
                 .build();
-        WeatherRxService weatherService = retrofit.create(WeatherRxService.class);
-        weatherService.getWeather(key,city,province)
+        WeatherDBService weatherDBService = retrofit.create(WeatherDBService.class);
+        weatherDBService.getWeather(DesignPatternConfig.MOBAPI_KEY,city,province)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Result<ResultEntity>>() {
+                .subscribe(new Subscriber<Result<ResultMvvm>>() {
                     @Override
                     public void onCompleted() {
 
@@ -55,20 +51,18 @@ public class WeatherPresenter extends MvpBasePresenter<WeatherView> {
                     @Override
                     public void onError(Throwable e) {
                         Log.i(TAG,e.toString());
+                        listener.onError();
                     }
-
                     @Override
-                    public void onNext(Result<ResultEntity> resultEntityResult) {
-                        if (!"200".equals(resultEntityResult.getRetCode())){
-                            Log.i(TAG,resultEntityResult.getMsg());
+                    public void onNext(Result<ResultMvvm> resultMvvmResult) {
+                        if (!"200".equals(resultMvvmResult.getRetCode())){
+                            Log.i(TAG,resultMvvmResult.getMsg());
+                            listener.onError();
                         }else {
-                            List<ResultEntity> resultEntities = resultEntityResult.getResult();
-                            List<WeatherEntity> weatherList = resultEntities.get(0).getFuture();
-                            Log.i(TAG, "weather:" + weatherList.toString());
-                            WeatherView weatherView = getView();
-                            if (weatherView != null){
-                                weatherView.onLoadWeatherComplete(weatherList);
-                            }
+                            List<ResultMvvm> resultMvvms = resultMvvmResult.getResult();
+                            List<WeatherMvvm> weatherMvvms = resultMvvms.get(0).getFuture();
+                            Log.i(TAG, "weather:" + weatherMvvms.toString());
+                            listener.onSuccess(weatherMvvms);
 
                         }
                     }

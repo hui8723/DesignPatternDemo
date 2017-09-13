@@ -3,8 +3,6 @@ package com.example.tangminghui.designpatterndemo.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.tangminghui.designpatterndemo.MainActivity;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 

@@ -37,5 +37,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     compile 'com.hannesdorfmann.mosby3:mvp:3.0.4'
+    compile 'com.orhanobut:logger:2.1.1'
     testCompile 'junit:junit:4.12'
 }

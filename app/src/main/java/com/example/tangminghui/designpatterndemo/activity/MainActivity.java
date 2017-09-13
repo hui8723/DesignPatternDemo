@@ -1,4 +1,4 @@
-package com.example.tangminghui.designpatterndemo;
+package com.example.tangminghui.designpatterndemo.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.tangminghui.designpatterndemo.activity.BestDesignActivity;
-import com.example.tangminghui.designpatterndemo.activity.MvcDesignActivity;
-import com.example.tangminghui.designpatterndemo.activity.MvpDesignActivity;
-import com.example.tangminghui.designpatterndemo.activity.MvvmDesignActivity;
+import com.example.tangminghui.designpatterndemo.R;
 
 public class MainActivity extends AppCompatActivity {
 

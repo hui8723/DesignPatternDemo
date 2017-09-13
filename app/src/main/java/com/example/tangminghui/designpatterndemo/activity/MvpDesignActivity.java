@@ -1,24 +1,20 @@
 package com.example.tangminghui.designpatterndemo.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tangminghui.designpatterndemo.R;
 import com.example.tangminghui.designpatterndemo.adapter.WeatherAdapter;
-import com.example.tangminghui.designpatterndemo.app.DesignPatternConfig;
 import com.example.tangminghui.designpatterndemo.entity.WeatherEntity;
 import com.example.tangminghui.designpatterndemo.interfaces.WeatherView;
-import com.example.tangminghui.designpatterndemo.presenter.WeatherPresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.example.tangminghui.designpatterndemo.presenter.WeathersPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +23,7 @@ import java.util.List;
  * Created by tangminghui on 2017/6/26.
  */
 
-public class MvpDesignActivity extends MvpActivity<WeatherView,WeatherPresenter> implements WeatherView{
+public class MvpDesignActivity extends Activity implements WeatherView<WeatherEntity>{
 
     private static final String TAG = "MvpDesignActivity";
 
@@ -36,14 +32,14 @@ public class MvpDesignActivity extends MvpActivity<WeatherView,WeatherPresenter>
     private Button btnSubmit;
     private RecyclerView ry_weather;
     private WeatherAdapter adapter;
-    private List<WeatherEntity> weatherEntities = new ArrayList<WeatherEntity>();
+    private List<WeatherEntity> weatherEntities = new ArrayList<>();
+    private WeathersPresenter presenter = new WeathersPresenter(this);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mvc);
-        initData();
         initView();
 
     }
@@ -60,31 +56,28 @@ public class MvpDesignActivity extends MvpActivity<WeatherView,WeatherPresenter>
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ("".equals(etProvince.getText().toString()) || "".equals(etCity.getText().toString())){
-                    Toast.makeText(MvpDesignActivity.this,"The Province or City is not null.",Toast.LENGTH_LONG).show();
-                }else {
-                    Log.i(TAG, "Province:" + etProvince.getText().toString() + ",City:" + etCity.getText().toString());
-                    getPresenter().get(DesignPatternConfig.MOBAPI_KEY,etCity.getText().toString(),etProvince.getText().toString());
-                }
+                presenter.getWeathers();
+
             }
         });
     }
 
-    private void initData() {
-        WeatherEntity weatherEntity = new WeatherEntity();
-        weatherEntity.setDate("aaa");
-        weatherEntity.setDayTime("aaaa");
-        weatherEntity.setTemperature("bbb");
-        weatherEntity.setWind("bbbb");
-        weatherEntity.setWeek("ccc");
-        weatherEntity.setNight("cccc");
-        weatherEntities.add(0,weatherEntity);
+
+
+    @Override
+    public String getProvince() {
+        return etProvince.getText().toString();
     }
 
-    @NonNull
     @Override
-    public WeatherPresenter createPresenter() {
-        return new WeatherPresenter();
+    public String getCity() {
+        return etCity.getText().toString();
+    }
+
+    @Override
+    public void sendErrorMessage() {
+        dismissProgressDialog();
+        Toast.makeText(this,"信息输入错误！！！",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,5 +108,11 @@ public class MvpDesignActivity extends MvpActivity<WeatherView,WeatherPresenter>
             weatherEntities.add(weatherEntity);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoadWeatherError() {
+        dismissProgressDialog();
+        Toast.makeText(this,"数据加载失败",Toast.LENGTH_SHORT).show();
     }
 }
