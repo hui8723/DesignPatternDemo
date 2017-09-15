@@ -34,6 +34,8 @@ public class BestDesignActivity extends Activity implements WeatherView<WeatherM
 
     private ActivityBestBinding binding;
 
+    private WeatherMvvmAdapter adapter;
+
     List<WeatherMvvm> weatherEntities = new ArrayList<>();
 
     private WeathersPresenter presenter = new WeathersPresenter(this);
@@ -42,10 +44,10 @@ public class BestDesignActivity extends Activity implements WeatherView<WeatherM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_best);
-        binding.setWeather(new Weather("请输入省","请输入市"));
         binding.setPresenter(new WeatherBestPresenter(this));
+        adapter = new WeatherMvvmAdapter((weatherEntities));
         binding.ryBestWeather.setLayoutManager(new LinearLayoutManager(this));
-        binding.ryBestWeather.setAdapter(new WeatherMvvmAdapter(weatherEntities));
+        binding.ryBestWeather.setAdapter(adapter);
     }
 
 
@@ -77,7 +79,7 @@ public class BestDesignActivity extends Activity implements WeatherView<WeatherM
         for (WeatherMvvm weatherMvvm:weatherMvvmList) {
             weatherEntities.add(weatherMvvm);
         }
-        Logger.d(weatherMvvmList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

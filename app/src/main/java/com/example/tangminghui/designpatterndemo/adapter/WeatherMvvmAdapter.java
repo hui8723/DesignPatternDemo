@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.example.tangminghui.designpatterndemo.R;
 import com.example.tangminghui.designpatterndemo.databinding.ItemWeatherBinding;
 import com.example.tangminghui.designpatterndemo.entity.WeatherMvvm;
@@ -28,8 +29,10 @@ public class WeatherMvvmAdapter extends RecyclerView.Adapter<WeatherMvvmAdapter.
 
     @Override
     public WeatherViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weather,parent,false);
-        return new WeatherViewHolder(view);
+        ItemWeatherBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.item_weather,parent,false);
+        WeatherViewHolder holder = new WeatherViewHolder(binding.getRoot());
+        holder.setBinding(binding);
+        return holder;
     }
 
     @Override
@@ -48,11 +51,15 @@ public class WeatherMvvmAdapter extends RecyclerView.Adapter<WeatherMvvmAdapter.
 
         public WeatherViewHolder(View view){
             super(view);
-            binding = DataBindingUtil.bind(view);
+        }
+
+        public void setBinding(ItemWeatherBinding binding) {
+            this.binding = binding;
         }
 
         public void bind(@NonNull WeatherMvvm weatherMvvm){
             binding.setWeather(weatherMvvm);
+
         }
 
     }
